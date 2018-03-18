@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using PokemonFunctions.Models.Interfaces;
 
 namespace PokemonFunctions.Models
 {
-    public class Pokemon
+    public class Pokemon : IIndexable
     {
         [JsonProperty("id")]
         public int Id { get; set; }

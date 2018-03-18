@@ -19,7 +19,7 @@ namespace PokemonFunctions
             {
                 log.Info("C# HTTP trigger function processed a request.");
                 var firstGen = await Generations.GetFirstGenerationAsync(log);
-                IndexService.IndexPokemons(firstGen, "firstgeneration");
+                IndexService.IndexCollection(firstGen, "firstgeneration");
                 return req.CreateResponse(HttpStatusCode.OK, "Indexing completed!");
             }
             catch (Exception ex)

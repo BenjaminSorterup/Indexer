@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PokemonFunctions.Models;
+using PokemonFunctions.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,9 +15,9 @@ namespace PokemonFunctions.Methods
     {
         private static HttpClient client = new HttpClient();
 
-        public static void IndexPokemons(List<Pokemon> pokemons, string collection)
+        public static void IndexCollection<T>(IList<T> data, string collection)
         {
-            string jsonDocs = JsonConvert.SerializeObject(pokemons);
+            string jsonDocs = JsonConvert.SerializeObject(data);
             string baseSolrUri = ConfigurationManager.AppSettings["SolrUri"];
             string requestUri = $"{baseSolrUri}/{collection}/update/json/docs?commit=true";
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(requestUri);
@@ -32,20 +33,11 @@ namespace PokemonFunctions.Methods
                 streamWriter.Close();
 
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                if(httpResponse.StatusCode != HttpStatusCode.OK)
+                if (httpResponse.StatusCode != HttpStatusCode.OK)
                 {
                     throw new Exception("HttpRequest was unsuccessful");
                 }
-                //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                //{
-                //    var result = streamReader.ReadToEnd();
-                //}
             }
-            //HttpResponseMessage response = await client.PostAsJsonAsync(requestUri, jsonDocs);
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    throw new Exception("HttpRequest was unsuccessful");
-            //}
         }
     }
 }
